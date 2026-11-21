@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Kuo Ching Tsung</title>
+  <meta name="description" content="聯絡 Kuo Ching Tsung 敬棕">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0a0a0a;
+      --soft: #6b6b6b;
+      --line: #bdbdbd;
+      --bar: 48px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "IBM Plex Mono", ui-monospace, Menlo, "PingFang TC", "Noto Sans TC", monospace;
+      overflow-x: hidden;
+    }
+
+    /* ── 頂部選單（與 Works 相同） ── */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      height: var(--bar);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--ink);
+    }
+    .logo {
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-family: "Anton", sans-serif;
+      font-size: 15px; letter-spacing: 0.06em;
+      color: var(--ink); text-decoration: none;
+    }
+    .menu { display: flex; flex: 1; justify-content: space-around; }
+    .menu a, .contact {
+      font-size: 12px; letter-spacing: 0.16em;
+      color: var(--ink); text-decoration: none; text-transform: uppercase;
+    }
+    .menu a:hover, .menu a[aria-current] { text-decoration: underline; text-underline-offset: 4px; }
+    .contact {
+      background: var(--ink); color: var(--bg);
+      border-radius: 999px; padding: 6px 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .contact::before {
+      content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--bg);
+    }
+
+    /* ── 頁標題（眼球遮罩，同 Works、About） ── */
+    .pagehead {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: 40px 12px 16px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .pagehead h1 {
+      font-family: "Anton", sans-serif;
+      font-weight: 400; text-transform: uppercase;
+      font-size: clamp(56px, 12vw, 180px);
+      line-height: 0.85;
+      position: relative;
+    }
+    .pagehead h1 canvas { position: absolute; left: 0; top: 0; pointer-events: none; }
+    .pagehead h1.eyed { color: transparent; }
+    .pagehead .count { font-size: 12px; letter-spacing: 0.16em; }
+
+    /* ── 內容：左文字＋社群連結，右表單 ── */
+    .body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 48px;
+      padding: 40px 12px 64px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .intro p {
+      font-size: 15px; line-height: 1.7; letter-spacing: 0.02em;
+      max-width: 30em;
+    }
+    .intro p + p { margin-top: 1em; }
+    .intro .zh { font-family: "PingFang TC", "Noto Sans TC", system-ui, sans-serif; }
+    .social {
+      display: flex; gap: 32px;
+      margin-top: 32px;
+      font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .social a { color: var(--ink); text-decoration: none; }
+    .social a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+    form { display: grid; gap: 6px; }
+    input, textarea {
+      width: 100%;
+      font: inherit; font-size: 15px; color: var(--ink);
+      padding: 18px 20px;
+      border: 1.5px solid var(--line); border-radius: 0;
+      background: var(--bg);
+      outline: none;
+    }
+    input:focus, textarea:focus { border-color: var(--ink); }
+    input::placeholder, textarea::placeholder { color: #8a8a8a; }
+    textarea { height: 200px; resize: vertical; }
+    .hp { display: none; }                 /* 防機器人欄位，真人看不到 */
+    button {
+      font: inherit; font-size: 15px; letter-spacing: 0.06em;
+      color: var(--bg); background: var(--ink);
+      border: 0; border-radius: 0;
+      padding: 22px; cursor: pointer;
+    }
+    button:disabled { opacity: 0.5; cursor: default; }
+    .status { min-height: 1.6em; font-size: 13px; color: var(--soft); }
+
+    @media (max-width: 700px) {
+      .menu .num { display: none; }
+      .menu a, .contact { font-size: 11px; letter-spacing: 0.1em; }
+      .logo { font-size: 13px; padding: 3px 9px; }
+      .pagehead { padding-top: 28px; }
+      .body { grid-template-columns: 1fr; gap: 40px; padding-top: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="./">KUO CHING TSUNG</a>
+    <nav class="menu">
+      <a href="works.html"><span class="num">01 </span>Works</a>
+      <a href="about.html"><span class="num">02 </span>About</a>
+    </nav>
+    <a class="contact" href="contact.html" aria-current="page">Contact</a>
+  </header>
+
+  <section class="pagehead">
+    <h1>Contact</h1>
+    <span class="count">(TPE)</span>
+  </section>
+
+  <main class="body">
+    <!-- 左：文字＋社群連結（文字為 AI 方案，可改） -->
+    <div class="intro">
+      <p>Hi! I’m <a href="about.html" style="color:inherit">Ching Tsung</a>, a new media artist based in Taipei. Whether it’s a collaboration, a commission, or just a thought, leave a message in the form and I’ll get back to you soon.</p>
+      <p class="zh">合作、委託或任何想法，都歡迎在右邊留言，我會盡快回覆。</p>
+      <nav class="social" aria-label="社群連結">
+        <!-- 換成你的網址 -->
+        <a href="https://www.instagram.com/_d__.g.__b_/" target="_blank" rel="noopener">IG</a>
+        <a href="https://www.facebook.com/profile.php?id=100009198381908" target="_blank" rel="noopener">FB</a>
+      </nav>
+    </div>
+
+    <!-- 右：留言表單，經 Web3Forms 寄到信箱（信箱不寫在網頁裡） -->
+    <form id="form">
+      <input type="text" name="name" placeholder="Name 姓名" required autocomplete="name">
+      <input type="email" name="email" placeholder="Email" required autocomplete="email">
+      <textarea name="message" placeholder="Message 留言" required></textarea>
+      <input class="hp" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off">
+      <button type="submit">Send</button>
+      <p class="status" id="status" role="status"></p>
+    </form>
+  </main>
+
+  <script>
+    /* 寄信：把 Web3Forms 給你的 Access Key 貼到下面引號裡（不是信箱密碼，可公開） */
+    const ACCESS_KEY = '2cbecc31-812a-4621-9d70-d5d0bb5dea24';
+
+    const form = document.getElementById('form');
+    const status = document.getElementById('status');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!ACCESS_KEY) { status.textContent = '表單尚未啟用，請先改用 IG／FB 聯絡。'; return; }
+      const btn = form.querySelector('button');
+      btn.disabled = true; status.textContent = '寄送中…';
+      const data = Object.fromEntries(new FormData(form));
+      data.access_key = ACCESS_KEY;
+      data.subject = '作品集網站新留言：' + data.name;
+      data.from_name = 'kuogary.github.io';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const out = await res.json();
+        if (!out.success) throw new Error(out.message);
+        form.reset();
+        status.textContent = '已送出，謝謝！我會盡快回覆。';
+      } catch (err) {
+        status.textContent = '送出失敗，請稍後再試，或改用 IG／FB 聯絡。';
+      } finally { btn.disabled = false; }
+    });
+  </script>
+  <script type="module" src="eyes-title.js"></script>
+</body>
+</html>

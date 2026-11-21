@@ -132,7 +132,7 @@
       <a href="works.html" aria-current="page"><span class="num">01 </span>Works</a>
       <a href="about.html"><span class="num">02 </span>About</a>
     </nav>
-    <a class="contact" href="#">Contact</a>
+    <a class="contact" href="contact.html">Contact</a>
   </header>
 
   <section class="pagehead">
@@ -140,33 +140,25 @@
     <span class="count">(06)</span>
   </section>
 
-  <!-- 換真作品：把 <div class="ph">…</div> 換成 <img src="images/檔名.jpg" alt="說明">，再改名稱、年份、類別 -->
-  <main class="grid">
-    <a class="work" href="#">
-      <div class="thumb"><div class="ph">IMAGE 01</div></div>
-      <div class="meta"><span>01</span><span class="title">Untitled Work A</span><span>2025 · TD</span></div>
-    </a>
-    <a class="work" href="#">
-      <div class="thumb"><div class="ph">IMAGE 02</div></div>
-      <div class="meta"><span>02</span><span class="title">Untitled Work B</span><span>2025 · Rhino</span></div>
-    </a>
-    <a class="work" href="#">
-      <div class="thumb"><div class="ph">IMAGE 03</div></div>
-      <div class="meta"><span>03</span><span class="title">Untitled Work C</span><span>2024 · Installation</span></div>
-    </a>
-    <a class="work" href="#">
-      <div class="thumb"><div class="ph">IMAGE 04</div></div>
-      <div class="meta"><span>04</span><span class="title">Untitled Work D</span><span>2024 · TD</span></div>
-    </a>
-    <a class="work" href="#">
-      <div class="thumb"><div class="ph">IMAGE 05</div></div>
-      <div class="meta"><span>05</span><span class="title">Untitled Work E</span><span>2023 · Rhino</span></div>
-    </a>
-    <a class="work" href="#">
-      <div class="thumb"><div class="ph">IMAGE 06</div></div>
-      <div class="meta"><span>06</span><span class="title">Untitled Work F</span><span>2023 · Art</span></div>
-    </a>
-  </main>
+  <!-- 作品內容在 works-data.js 改；這裡依資料自動產生格子，每格連到 project.html?id=編號 -->
+  <main class="grid" id="grid"></main>
+
+  <script src="works-data.js"></script>
+  <script>
+    (function () {
+      const grid = document.getElementById('grid');
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const pad = n => String(n).padStart(2, '0');
+      grid.innerHTML = WORKS.map((w, i) => `
+        <a class="work" href="project.html?id=${pad(i + 1)}">
+          <div class="thumb">${w.cover
+            ? `<img src="${esc(w.cover)}" alt="${esc(w.title)}" loading="lazy">`
+            : `<div class="ph">IMAGE ${pad(i + 1)}</div>`}</div>
+          <div class="meta"><span>${pad(i + 1)}</span><span class="title">${esc(w.title)}</span><span>${esc(w.year)} · ${esc(w.category)}</span></div>
+        </a>`).join('');
+      document.querySelector('.pagehead .count').textContent = `(${pad(WORKS.length)})`;
+    })();
+  </script>
 
   <script type="module" src="eyes-title.js"></script>
 </body>

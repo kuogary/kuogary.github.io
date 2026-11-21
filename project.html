@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Work — Kuo Ching Tsung</title>
+  <meta name="description" content="Kuo Ching Tsung 作品">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0a0a0a;
+      --muted: #e6e6e6;
+      --soft: #6b6b6b;
+      --bar: 48px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "IBM Plex Mono", ui-monospace, Menlo, "PingFang TC", "Noto Sans TC", monospace;
+      overflow-x: hidden;
+    }
+
+    /* ── 頂部選單（與 Works 相同） ── */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      height: var(--bar);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--ink);
+    }
+    .logo {
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-family: "Anton", sans-serif;
+      font-size: 15px; letter-spacing: 0.06em;
+      color: var(--ink); text-decoration: none;
+    }
+    .menu { display: flex; flex: 1; justify-content: space-around; }
+    .menu a, .contact {
+      font-size: 12px; letter-spacing: 0.16em;
+      color: var(--ink); text-decoration: none; text-transform: uppercase;
+    }
+    .menu a:hover, .menu a[aria-current] { text-decoration: underline; text-underline-offset: 4px; }
+    .contact {
+      background: var(--ink); color: var(--bg);
+      border-radius: 999px; padding: 6px 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .contact::before {
+      content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--bg);
+    }
+
+    /* ── 作品標題 ── */
+    .pagehead {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+      padding: 40px 12px 16px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .pagehead h1 {
+      font-family: "Anton", sans-serif;
+      font-weight: 400; text-transform: uppercase;
+      font-size: clamp(40px, 8vw, 120px);
+      line-height: 0.9;
+    }
+    .pagehead .count { font-size: 12px; letter-spacing: 0.16em; white-space: nowrap; }
+
+    /* ── 年份／類別 ── */
+    .facts {
+      display: flex; gap: 32px;
+      padding: 12px;
+      border-bottom: 1px solid var(--ink);
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .facts span b { font-weight: 400; color: var(--soft); margin-right: 8px; }
+
+    /* ── 大圖＋說明 ── */
+    .shots { display: grid; gap: 12px; padding: 12px; }
+    .shot {
+      aspect-ratio: 16 / 9;
+      background: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; letter-spacing: 0.16em; color: #888;
+      overflow: hidden;
+    }
+    .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .desc {
+      display: grid; grid-template-columns: minmax(140px, 1fr) 3fr; gap: 12px;
+      padding: 24px 12px 32px;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+    .desc .label { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+    .desc .text { max-width: 40em; }
+    .desc p { font-family: "PingFang TC", "Noto Sans TC", system-ui, sans-serif; font-size: 15px; line-height: 1.9; }
+    .desc p + p { margin-top: 1.2em; }
+
+    /* ── 上一件／回列表／下一件 ── */
+    .pager {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      padding: 16px 12px 40px;
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .pager a { color: var(--ink); text-decoration: none; }
+    .pager a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .pager .next { text-align: right; }
+
+    @media (max-width: 700px) {
+      .menu .num { display: none; }
+      .menu a, .contact { font-size: 11px; letter-spacing: 0.1em; }
+      .logo { font-size: 13px; padding: 3px 9px; }
+      .pagehead { padding-top: 28px; }
+      .desc { grid-template-columns: 1fr; }
+      .pager { grid-template-columns: 1fr 1fr; row-gap: 12px; }
+      .pager .back { grid-column: 1 / -1; grid-row: 2; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="./">KUO CHING TSUNG</a>
+    <nav class="menu">
+      <a href="works.html" aria-current="page"><span class="num">01 </span>Works</a>
+      <a href="about.html"><span class="num">02 </span>About</a>
+    </nav>
+    <a class="contact" href="contact.html">Contact</a>
+  </header>
+
+  <section class="pagehead">
+    <h1 id="title">Work</h1>
+    <span class="count" id="count"></span>
+  </section>
+  <div class="facts">
+    <span><b>Year</b><span id="year"></span></span>
+    <span><b>Category</b><span id="cat"></span></span>
+  </div>
+
+  <main>
+    <div class="shots" id="shots"></div>
+    <section class="desc">
+      <div class="label">About this work</div>
+      <div class="text" id="desc"></div>
+    </section>
+    <nav class="pager">
+      <a class="prev" id="prev" href="#"></a>
+      <a class="back" href="works.html">All works</a>
+      <a class="next" id="next" href="#"></a>
+    </nav>
+  </main>
+
+  <script src="works-data.js"></script>
+  <script>
+    /* 依網址 ?id=01 從 works-data.js 取出作品；找不到就回 Works 列表 */
+    (function () {
+      const pad = n => String(n).padStart(2, '0');
+      const i = parseInt(new URLSearchParams(location.search).get('id'), 10) - 1;
+      const w = WORKS[i];
+      if (!w) { location.replace('works.html'); return; }
+      const $ = id => document.getElementById(id);
+      const n = WORKS.length;
+
+      document.title = `${w.title} — Kuo Ching Tsung`;
+      $('title').textContent = w.title;
+      $('count').textContent = `${pad(i + 1)} / ${pad(n)}`;
+      $('year').textContent = w.year;
+      $('cat').textContent = w.category;
+
+      const imgs = w.images && w.images.length ? w.images : [null, null, null];
+      imgs.forEach((src, k) => {
+        const box = document.createElement('div');
+        box.className = 'shot';
+        if (src) {
+          const img = document.createElement('img');
+          img.src = src; img.alt = `${w.title} ${k + 1}`; img.loading = k ? 'lazy' : 'eager';
+          box.appendChild(img);
+        } else box.textContent = `IMAGE ${pad(k + 1)}`;
+        $('shots').appendChild(box);
+      });
+      (w.desc || []).forEach(t => { const p = document.createElement('p'); p.textContent = t; $('desc').appendChild(p); });
+
+      // 上一件／下一件（頭尾相接）
+      const prev = (i - 1 + n) % n, next = (i + 1) % n;
+      $('prev').href = `project.html?id=${pad(prev + 1)}`;
+      $('prev').textContent = `← ${WORKS[prev].title}`;
+      $('next').href = `project.html?id=${pad(next + 1)}`;
+      $('next').textContent = `${WORKS[next].title} →`;
+    })();
+  </script>
+</body>
+</html>

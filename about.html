@@ -108,14 +108,15 @@
     .cv { list-style: none; }
     .cv li {
       display: grid;
-      grid-template-columns: 4em 1fr minmax(6em, auto);
-      gap: 12px;
+      grid-template-columns: 4em 1fr;
+      column-gap: 12px;
       padding: 10px 0;
       border-top: 1px solid #d9d9d9;
       font-size: 13px; line-height: 1.6;
     }
     .cv li:first-child { border-top: 0; padding-top: 0; }
-    .cv .role { text-align: right; color: var(--soft); }
+    .cv .role { grid-column: 2; color: var(--soft); }   /* 角色放在項目下方 */
+    .cv .role:empty { display: none; }
 
     @media (max-width: 700px) {
       .menu .num { display: none; }
@@ -124,7 +125,6 @@
       .pagehead { padding-top: 28px; }
       .block { grid-template-columns: 1fr; gap: 16px; }
       .cv li { grid-template-columns: 3.5em 1fr; }
-      .cv .role { grid-column: 2; text-align: left; margin-top: -6px; }
     }
   </style>
 </head>
@@ -135,7 +135,7 @@
       <a href="works.html"><span class="num">01 </span>Works</a>
       <a href="about.html" aria-current="page"><span class="num">02 </span>About</a>
     </nav>
-    <a class="contact" href="#">Contact</a>
+    <a class="contact" href="contact.html">Contact</a>
   </header>
 
   <section class="pagehead">
