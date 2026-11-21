@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Kuo Ching Tsung</title>
+  <meta name="description" content="Kuo Ching Tsung 敬棕：科技藝術創作者，台北。自述與經歷。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0a0a0a;
+      --soft: #6b6b6b;
+      --bar: 48px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "IBM Plex Mono", ui-monospace, Menlo, "PingFang TC", "Noto Sans TC", monospace;
+      overflow-x: hidden;
+    }
+
+    /* ── 頂部選單（與 Works 相同） ── */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      height: var(--bar);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--ink);
+    }
+    .logo {
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-family: "Anton", sans-serif;
+      font-size: 15px; letter-spacing: 0.06em;
+      color: var(--ink); text-decoration: none;
+    }
+    .menu { display: flex; flex: 1; justify-content: space-around; }
+    .menu a, .contact {
+      font-size: 12px; letter-spacing: 0.16em;
+      color: var(--ink); text-decoration: none; text-transform: uppercase;
+    }
+    .menu a:hover, .menu a[aria-current] { text-decoration: underline; text-underline-offset: 4px; }
+    .contact {
+      background: var(--ink); color: var(--bg);
+      border-radius: 999px; padding: 6px 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .contact::before {
+      content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--bg);
+    }
+
+    /* ── 頁標題 ── */
+    .pagehead {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: 40px 12px 16px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .pagehead h1 {
+      font-family: "Anton", sans-serif;
+      font-weight: 400; text-transform: uppercase;
+      font-size: clamp(56px, 12vw, 180px);
+      line-height: 0.85;
+      position: relative;
+    }
+    /* 眼球畫布疊在字上；畫好後原本的字變透明（仍保留給搜尋與讀屏） */
+    .pagehead h1 canvas {
+      position: absolute; left: 0; top: 0;
+      pointer-events: none;
+    }
+    .pagehead h1.eyed { color: transparent; }
+    .pagehead .count { font-size: 12px; letter-spacing: 0.16em; }
+
+    /* ── 區塊：左邊小標，右邊內容 ── */
+    .block {
+      display: grid;
+      grid-template-columns: minmax(140px, 1fr) 3fr;
+      gap: 12px;
+      padding: 24px 12px 32px;
+      border-bottom: 1px solid var(--ink);
+    }
+    .label {
+      font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .name {
+      font-family: "Anton", sans-serif;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1; letter-spacing: 0.02em;
+    }
+    .name .zh { font-family: "PingFang TC", "Noto Sans TC", sans-serif; font-weight: 600; margin-left: 0.3em; }
+    .facts {
+      margin-top: 12px;
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .statement { max-width: 40em; }
+    .statement p {
+      font-family: "PingFang TC", "Noto Sans TC", system-ui, sans-serif;
+      font-size: 15px; line-height: 1.9;
+    }
+    .statement p + p { margin-top: 1.2em; }
+
+    /* 經歷列表：年份｜項目｜角色 */
+    .cv { list-style: none; }
+    .cv li {
+      display: grid;
+      grid-template-columns: 4em 1fr minmax(6em, auto);
+      gap: 12px;
+      padding: 10px 0;
+      border-top: 1px solid #d9d9d9;
+      font-size: 13px; line-height: 1.6;
+    }
+    .cv li:first-child { border-top: 0; padding-top: 0; }
+    .cv .role { text-align: right; color: var(--soft); }
+
+    @media (max-width: 700px) {
+      .menu .num { display: none; }
+      .menu a, .contact { font-size: 11px; letter-spacing: 0.1em; }
+      .logo { font-size: 13px; padding: 3px 9px; }
+      .pagehead { padding-top: 28px; }
+      .block { grid-template-columns: 1fr; gap: 16px; }
+      .cv li { grid-template-columns: 3.5em 1fr; }
+      .cv .role { grid-column: 2; text-align: left; margin-top: -6px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="./">KUO CHING TSUNG</a>
+    <nav class="menu">
+      <a href="works.html"><span class="num">01 </span>Works</a>
+      <a href="about.html" aria-current="page"><span class="num">02 </span>About</a>
+    </nav>
+    <a class="contact" href="#">Contact</a>
+  </header>
+
+  <section class="pagehead">
+    <h1>About</h1>
+    <span class="count">(TPE)</span>
+  </section>
+
+  <section class="block">
+    <div class="label">Profile</div>
+    <div>
+      <div class="name">KUO CHING TSUNG<span class="zh">敬棕</span></div>
+      <div class="facts">b. 2001 · Taipei, Taiwan 台北，台灣</div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="label">Statement</div>
+    <div class="statement">
+      <p>在資訊爆炸的台北長大。從小在畫室接受繪畫訓練，就讀台北市立古亭國中、復興高中美術班，開始嘗試素描與水彩以外的媒材。2019 年進入元智大學藝術與設計學系，參與多個工作營，在大量木工勞動與團隊合作中，學會更精準地製作「作品」。</p>
+      <p>我把藝術理解為感性的抒發，設計則是理性而精準的思考，這兩種邏輯同時存在於我的創作裡。接觸科技藝術後，我被它結合感性、理性與多種手法所產生的化學反應吸引，尤其是作品透過「互動」與觀眾產生的反應。</p>
+      <p>目前的創作關注「同質化」：資訊隨手可得，反思卻逐漸減少，喜歡與不喜歡止步於表面。身為在這座城市長大、同樣身處其中的一員，我試著在這樣的環境裡找出屬於自己的美學，也希望讓科技藝術更普及、更被理解。</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="label">Education</div>
+    <ul class="cv">
+      <li><span>2019–</span><span>元智大學 藝術與設計學系</span><span class="role"></span></li>
+      <li><span>2019</span><span>台北市立復興高級中學 美術班 畢業</span><span class="role"></span></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <div class="label">Award</div>
+    <ul class="cv">
+      <li><span>2021</span><span>台灣高鐵藝術計畫「寶島隨身聽」校園徵件計畫</span><span class="role">首獎</span></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <div class="label">Projects</div>
+    <ul class="cv">
+      <li><span>2022</span><span>第 57 屆廣播電視金鐘獎頒獎典禮</span><span class="role">執行設計</span></li>
+      <li><span>2022</span><span>總統府「2022 國慶總統府建築光雕展演－寶島有光．土地之愛」</span><span class="role">執行設計</span></li>
+      <li><span>2022</span><span>元智大學藝術與設計學系 畢業製作統籌會</span><span class="role">空間組組長</span></li>
+      <li><span>2021</span><span>台灣高鐵藝術計畫「寶島隨身聽」</span><span class="role">協助裝置製作</span></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <div class="label">Workshops</div>
+    <ul class="cv">
+      <li><span>2022</span><span>基隆市政府 × 元智大學藝術與設計系所「山海工作營 V7.0－山海小市集」</span><span class="role">山海 bar</span></li>
+      <li><span>2021</span><span>元智大學藝術與設計系所「發春音樂祭」</span><span class="role">木工組</span></li>
+      <li><span>2021</span><span>元智大學藝術與設計系所「桃花工作營」</span><span class="role">組長</span></li>
+      <li><span>2021</span><span>特有生物研究保育中心 野生動物急救站「鳥類標本製作研究營」</span><span class="role">學員</span></li>
+      <li><span>2020</span><span>元智大學藝術與設計系所「桃花工作營」</span><span class="role">副組長</span></li>
+      <li><span>2020</span><span>元智大學藝術與設計系所「太魯閣工作營」</span><span class="role">木工組</span></li>
+      <li><span>2020</span><span>基隆市政府 × 元智大學藝術與設計系所「山海工作營 V5.0－山海小市集」</span><span class="role">木工組</span></li>
+    </ul>
+  </section>
+
+  <script type="module" src="eyes-title.js"></script>
+</body>
+</html>

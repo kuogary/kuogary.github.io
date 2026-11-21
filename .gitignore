@@ -8,3 +8,5 @@
 /images/*
 !/images/hero-cutout.png
 !/images/eyes.jpg
+!/about.html
+!/eyes-title.js
