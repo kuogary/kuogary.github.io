@@ -61,6 +61,11 @@
       min-height: 420px;
       overflow: hidden;
     }
+    /* 最底層：3D 眼球背景（Three.js 畫在這個 canvas） */
+    #eyes {
+      position: absolute; inset: 0; z-index: 0;
+      width: 100%; height: 100%; display: block;
+    }
     .bigname {
       position: absolute; inset: 0;
       display: flex; flex-direction: column; justify-content: flex-start;
@@ -68,7 +73,8 @@
       font-family: "Anton", sans-serif;
       text-transform: uppercase;
       line-height: 0.82;
-      z-index: 0;
+      z-index: 1;
+      pointer-events: none;
       user-select: none;
     }
     .bigname { align-items: center; }
@@ -79,7 +85,8 @@
     }
     .bigname .line { display: none; }   /* 手機用的三行版，桌機隱藏 */
     .hero {
-      position: absolute; z-index: 1;
+      position: absolute; z-index: 2;
+      pointer-events: none;
       left: 50%; bottom: 0;
       transform: translateX(-50%);
       height: 88%;
@@ -111,6 +118,7 @@
   </header>
 
   <main class="stage">
+    <canvas id="eyes" aria-hidden="true"></canvas>
     <h1 class="bigname" aria-label="Kuo Ching Tsung">
       <span class="full fit">Kuo Ching Tsung</span>
       <span class="line fit">Kuo</span>
@@ -133,6 +141,111 @@
     }
     (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
     addEventListener('resize', fit);
+  </script>
+
+  <!-- 3D 眼球背景：移植自 TD 檔 suc.20.toe 的 eyes 元件
+       格子排列的眼球 → 看向滑鼠；滑鼠停下約 1.5 秒 → 改成各自隨機飄動 -->
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+    const canvas = document.getElementById('eyes');
+    const stage = canvas.parentElement;
+    let renderer;
+    try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
+    catch (e) { canvas.remove(); throw e; }          // 不支援 WebGL 就維持白底
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -2000, 2000);
+    camera.position.z = 1000;
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8a8a, 1.6));
+    const key = new THREE.DirectionalLight(0xffffff, 1.4);
+    key.position.set(-0.6, 0.8, 1);
+    scene.add(key);
+
+    // 球體 UV 改成「正面平面投影」：正面中心＝虹膜，背面全白
+    const geo = new THREE.SphereGeometry(1, 48, 32);
+    const n = geo.attributes.normal, uv = geo.attributes.uv;
+    for (let i = 0; i < n.count; i++) {
+      const z = n.getZ(i);
+      if (z >= 0) uv.setXY(i, 0.5 + n.getX(i) * 0.5, 0.5 + n.getY(i) * 0.5);
+      else uv.setXY(i, 0.02, 0.02);
+    }
+    const tex = new THREE.TextureLoader().load('images/eyes.jpg');
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 4;
+    const mat = new THREE.MeshPhongMaterial({ map: tex, shininess: 69, specular: 0x777777 });
+
+    let mesh, eyes = [], W = 1, H = 1, depth = 300;
+    const dummy = new THREE.Object3D();
+
+    function build() {
+      W = stage.clientWidth; H = stage.clientHeight;
+      renderer.setSize(W, H, false);
+      Object.assign(camera, { left: -W / 2, right: W / 2, top: H / 2, bottom: -H / 2 });
+      camera.updateProjectionMatrix();
+
+      const s = Math.max(W, H) / 10;                 // 長邊約 10 顆（TD 原作 10×10）
+      const cols = Math.ceil(W / s) + 1, rows = Math.ceil(H / s) + 1;
+      const r = s * 0.47;
+      depth = s * 2.2;                               // 越小轉得越多（對應 TD 的 ×1.8）
+      if (mesh) { scene.remove(mesh); mesh.dispose(); }
+      mesh = new THREE.InstancedMesh(geo, mat, cols * rows);
+      eyes = [];
+      const ox = -(cols - 1) * s / 2, oy = -(rows - 1) * s / 2;
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+        eyes.push({
+          x: ox + i * s, y: oy + j * s, r,
+          q: new THREE.Quaternion(),
+          p1: Math.random() * 100, p2: Math.random() * 100, sp: 0.4 + Math.random() * 0.5
+        });
+      }
+      scene.add(mesh);
+    }
+
+    // 滑鼠／手指位置（換成以畫面中心為原點、y 朝上）
+    const ptr = { x: 0, y: 0, last: -1e9 };
+    function setPtr(cx, cy) {
+      const b = stage.getBoundingClientRect();
+      ptr.x = cx - b.left - W / 2; ptr.y = H / 2 - (cy - b.top); ptr.last = performance.now();
+    }
+    addEventListener('pointermove', e => setPtr(e.clientX, e.clientY), { passive: true });
+    addEventListener('touchstart', e => setPtr(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    addEventListener('touchmove', e => setPtr(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const target = new THREE.Vector3(), want = new THREE.Quaternion();
+    let prev = performance.now(), mix = 0;           // mix：0＝跟滑鼠，1＝隨機飄
+
+    function frame(now) {
+      const dt = Math.min((now - prev) / 1000, 0.1); prev = now;
+      const idle = now - ptr.last > 1500 && !reduce;
+      mix += ((idle ? 1 : 0) - mix) * (1 - Math.exp(-dt / 0.8 * 3));   // 約 0.8 秒切換
+      const t = now / 1000, k = 1 - Math.exp(-dt / 0.12);
+
+      eyes.forEach((e, idx) => {
+        const wx = e.x + Math.sin(t * e.sp + e.p1) * depth * 0.9;
+        const wy = e.y + Math.cos(t * e.sp * 0.8 + e.p2) * depth * 0.7;
+        target.set(ptr.x * (1 - mix) + wx * mix, ptr.y * (1 - mix) + wy * mix, depth);
+        dummy.position.set(e.x, e.y, 0);
+        dummy.lookAt(target);
+        want.copy(dummy.quaternion);
+        e.q.slerp(want, k);
+        dummy.quaternion.copy(e.q);
+        dummy.scale.setScalar(e.r);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(idx, dummy.matrix);
+      });
+      mesh.instanceMatrix.needsUpdate = true;
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+
+    build();
+    addEventListener('resize', build);
+    requestAnimationFrame(frame);
   </script>
 </body>
 </html>
