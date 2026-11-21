@@ -22,6 +22,9 @@
       color: var(--ink);
       font-family: "IBM Plex Mono", ui-monospace, Menlo, "PingFang TC", "Noto Sans TC", monospace;
       overflow-x: hidden;
+      /* 整頁至少一個畫面高，底線落在畫面最下面 */
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; flex-direction: column;
     }
 
     /* ── 頂部選單（與 Works 相同） ── */
@@ -80,6 +83,8 @@
       gap: 12px 48px;
       padding: 40px 12px 64px;
       border-bottom: 1px solid var(--ink);
+      flex: 1;                              /* 撐滿剩下的高度 */
+      align-content: start;
     }
     .intro p {
       font-size: 15px; line-height: 1.7; letter-spacing: 0.02em;
@@ -88,12 +93,12 @@
     .intro p + p { margin-top: 1em; }
     .intro .zh { font-family: "PingFang TC", "Noto Sans TC", system-ui, sans-serif; }
     .social {
-      display: flex; gap: 32px;
+      display: flex; gap: 20px;
       margin-top: 32px;
-      font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
     }
-    .social a { color: var(--ink); text-decoration: none; }
-    .social a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .social a { color: var(--ink); display: inline-flex; transition: opacity .2s; }
+    .social a:hover { opacity: 0.55; }
+    .social svg { width: 30px; height: 30px; display: block; }
 
     form { display: grid; gap: 6px; }
     input, textarea {
@@ -106,7 +111,7 @@
     }
     input:focus, textarea:focus { border-color: var(--ink); }
     input::placeholder, textarea::placeholder { color: #8a8a8a; }
-    textarea { height: 200px; resize: vertical; }
+    textarea { height: 320px; resize: vertical; }
     .hp { display: none; }                 /* 防機器人欄位，真人看不到 */
     button {
       font: inherit; font-size: 15px; letter-spacing: 0.06em;
@@ -147,9 +152,21 @@
       <p>Hi! I’m <a href="about.html" style="color:inherit">Ching Tsung</a>, a new media artist based in Taipei. Whether it’s a collaboration, a commission, or just a thought, leave a message in the form and I’ll get back to you soon.</p>
       <p class="zh">合作、委託或任何想法，都歡迎在右邊留言，我會盡快回覆。</p>
       <nav class="social" aria-label="社群連結">
-        <!-- 換成你的網址 -->
-        <a href="https://www.instagram.com/_d__.g.__b_/" target="_blank" rel="noopener">IG</a>
-        <a href="https://www.facebook.com/profile.php?id=100009198381908" target="_blank" rel="noopener">FB</a>
+        <!-- 黑底圓角方塊＋白色圖形（自繪 SVG） -->
+        <a href="https://www.facebook.com/profile.php?id=100009198381908" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="5.5" fill="currentColor"/>
+            <path fill="#fff" d="M16.6 24v-9.3h3.1l.47-3.6H16.6V8.8c0-1.04.3-1.75 1.8-1.75h1.9V3.83c-.33-.04-1.46-.14-2.78-.14-2.75 0-4.63 1.68-4.63 4.76v2.65H9.8v3.6h3.1V24z"/>
+          </svg>
+        </a>
+        <a href="https://www.instagram.com/_d__.g.__b_/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="5.5" fill="currentColor"/>
+            <rect x="4.6" y="4.6" width="14.8" height="14.8" rx="4.3" fill="none" stroke="#fff" stroke-width="1.9"/>
+            <circle cx="12" cy="12" r="3.5" fill="none" stroke="#fff" stroke-width="1.9"/>
+            <circle cx="16.4" cy="7.6" r="1.05" fill="#fff"/>
+          </svg>
+        </a>
       </nav>
     </div>
 
