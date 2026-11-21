@@ -1,0 +1,8 @@
+# 白名單做法：預設全部不上傳，只放行網站需要的檔案。
+# 老師教材、CLAUDE.md、進度.md、歷史.md、原圖、設定檔都不會被上傳。
+/*
+!/.gitignore
+!/index.html
+!/images/
+/images/*
+!/images/hero-cutout.png

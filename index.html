@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kuo Ching Tsung</title>
+  <meta name="description" content="Kuo Ching Tsung 個人作品集">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0a0a0a;
+      --bar: 48px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+      overflow-x: hidden;
+    }
+
+    /* ── 頂部選單：細線＋等寬字 ── */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      height: var(--bar);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--ink);
+    }
+    .logo {
+      border: 1.5px solid var(--ink);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-family: "Anton", sans-serif;
+      font-size: 15px; letter-spacing: 0.06em;
+      color: var(--ink); text-decoration: none;
+    }
+    .menu { display: flex; flex: 1; justify-content: space-around; }
+    .menu a, .contact {
+      font-size: 12px; letter-spacing: 0.16em;
+      color: var(--ink); text-decoration: none; text-transform: uppercase;
+    }
+    .menu a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .contact {
+      background: var(--ink); color: var(--bg);
+      border-radius: 999px; padding: 6px 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .contact::before {
+      content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--bg);
+    }
+
+    /* ── 主畫面：大字在後，人像在前 ── */
+    .stage {
+      position: relative;
+      height: calc(100svh - var(--bar));
+      min-height: 420px;
+      overflow: hidden;
+    }
+    .bigname {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 0 12px;
+      font-family: "Anton", sans-serif;
+      text-transform: uppercase;
+      line-height: 0.82;
+      z-index: 0;
+      user-select: none;
+    }
+    .bigname { align-items: center; }
+    .bigname span {
+      display: block; white-space: nowrap; width: max-content;
+      transform: scaleY(1.45);          /* 拉高字形，接近超窄粗體 */
+      transform-origin: center;
+    }
+    .bigname .line { display: none; }   /* 手機用的三行版，桌機隱藏 */
+    .hero {
+      position: absolute; z-index: 1;
+      left: 50%; bottom: 0;
+      transform: translateX(-50%);
+      height: 88%;
+      width: auto; max-width: 96vw;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 24px rgba(0,0,0,.18));
+    }
+
+    @media (max-width: 700px) {
+      .menu .num { display: none; }
+      .menu a, .contact { font-size: 11px; letter-spacing: 0.1em; }
+      .logo { font-size: 13px; padding: 3px 9px; }
+      .bigname .full { display: none; }
+      .bigname .line { display: block; }
+      .bigname { line-height: 0.88; justify-content: flex-start; padding-top: 4%; }
+      .bigname span { transform: none; }
+      .hero { height: auto; width: 96vw; bottom: 6%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="./">KUO CHING TSUNG</a>
+    <nav class="menu">
+      <a href="#"><span class="num">01 </span>Works</a>
+      <a href="#"><span class="num">02 </span>About</a>
+    </nav>
+    <a class="contact" href="#">Contact</a>
+  </header>
+
+  <main class="stage">
+    <h1 class="bigname" aria-label="Kuo Ching Tsung">
+      <span class="full fit">Kuo Ching Tsung</span>
+      <span class="line fit">Kuo</span>
+      <span class="line fit">Ching</span>
+      <span class="line fit">Tsung</span>
+    </h1>
+    <img class="hero" src="images/hero-cutout.png" alt="3D 掃描半身像，嵌著眼睛、嘴、手的照片面板" width="966" height="818">
+  </main>
+
+  <script>
+    // 讓每行大字剛好撐滿畫面寬度
+    function fit() {
+      const box = document.querySelector('.bigname');
+      const w = box.clientWidth - 24;
+      document.querySelectorAll('.fit').forEach(el => {
+        if (getComputedStyle(el).display === 'none') return;
+        el.style.fontSize = '100px';
+        el.style.fontSize = (100 * w / el.scrollWidth) + 'px';
+      });
+    }
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+    addEventListener('resize', fit);
+  </script>
+</body>
+</html>
