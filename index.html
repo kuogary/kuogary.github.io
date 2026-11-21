@@ -125,7 +125,9 @@
       <span class="line fit">Ching</span>
       <span class="line fit">Tsung</span>
     </h1>
+    <!-- 試驗：暫時拿掉人像（要還原就刪掉這行與下一行的註解符號）
     <img class="hero" src="images/hero-cutout.png" alt="3D 掃描半身像，嵌著眼睛、嘴、手的照片面板" width="912" height="818">
+    -->
   </main>
 
   <script>
@@ -165,20 +167,25 @@
     key.position.set(-0.6, 0.8, 1);
     scene.add(key);
 
-    // 球體 UV 改成「正面平面投影」：正面中心＝虹膜，背面全白
-    const geo = new THREE.SphereGeometry(1, 48, 32);
-    const n = geo.attributes.normal, uv = geo.attributes.uv;
-    for (let i = 0; i < n.count; i++) {
-      const z = n.getZ(i);
-      if (z >= 0) uv.setXY(i, 0.5 + n.getX(i) * 0.5, 0.5 + n.getY(i) * 0.5);
-      else uv.setXY(i, 0.02, 0.02);
-    }
+    // 眼球拆成前後兩個半球：前半球用「正面平面投影」貼虹膜，後半球純眼白
+    // （若共用一顆球，跨過赤道的三角形會把虹膜拉成細線，看起來像側面裂痕）
+    const half = start => {
+      const g = new THREE.SphereGeometry(1, 48, 24, 0, Math.PI * 2, start, Math.PI / 2);
+      g.rotateX(Math.PI / 2);                        // 半球的極點轉到正前方（+z）
+      return g;
+    };
+    const frontGeo = half(0), backGeo = half(Math.PI / 2);
+    const n = frontGeo.attributes.normal, uv = frontGeo.attributes.uv;
+    for (let i = 0; i < n.count; i++) uv.setXY(i, 0.5 + n.getX(i) * 0.5, 0.5 + n.getY(i) * 0.5);
+
     const tex = new THREE.TextureLoader().load('images/eyes.jpg');
     tex.colorSpace = THREE.SRGBColorSpace;
     tex.anisotropy = 4;
-    const mat = new THREE.MeshPhongMaterial({ map: tex, shininess: 69, specular: 0x777777 });
+    const phong = { shininess: 69, specular: 0x777777 };
+    const frontMat = new THREE.MeshPhongMaterial({ map: tex, ...phong });
+    const backMat = new THREE.MeshPhongMaterial({ color: 0xf4f2ee, ...phong });   // 與貼圖眼白同色
 
-    let mesh, eyes = [], W = 1, H = 1, depth = 300;
+    let meshes = [], eyes = [], W = 1, H = 1, depth = 300;
     const dummy = new THREE.Object3D();
 
     function build() {
@@ -191,8 +198,9 @@
       const cols = Math.ceil(W / s) + 1, rows = Math.ceil(H / s) + 1;
       const r = s * 0.47;
       depth = s * 2.2;                               // 越小轉得越多（對應 TD 的 ×1.8）
-      if (mesh) { scene.remove(mesh); mesh.dispose(); }
-      mesh = new THREE.InstancedMesh(geo, mat, cols * rows);
+      meshes.forEach(m => { scene.remove(m); m.dispose(); });
+      meshes = [new THREE.InstancedMesh(frontGeo, frontMat, cols * rows),
+                new THREE.InstancedMesh(backGeo, backMat, cols * rows)];
       eyes = [];
       const ox = -(cols - 1) * s / 2, oy = -(rows - 1) * s / 2;
       for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
@@ -202,7 +210,7 @@
           p1: Math.random() * 100, p2: Math.random() * 100, sp: 0.4 + Math.random() * 0.5
         });
       }
-      scene.add(mesh);
+      meshes.forEach(m => scene.add(m));
     }
 
     // 滑鼠／手指位置（換成以畫面中心為原點、y 朝上）
@@ -236,9 +244,9 @@
         dummy.quaternion.copy(e.q);
         dummy.scale.setScalar(e.r);
         dummy.updateMatrix();
-        mesh.setMatrixAt(idx, dummy.matrix);
+        meshes.forEach(m => m.setMatrixAt(idx, dummy.matrix));
       });
-      mesh.instanceMatrix.needsUpdate = true;
+      meshes.forEach(m => { m.instanceMatrix.needsUpdate = true; });
       renderer.render(scene, camera);
       requestAnimationFrame(frame);
     }
