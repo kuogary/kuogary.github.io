@@ -22,14 +22,12 @@
       overflow-x: hidden;
     }
 
-    /* ── 頂部選單：細線＋等寬字 ── */
+    /* ── 選單：透明、三項直排，在「大字下緣 → 畫面底」之間均分（top 由下方 JS 設定） ── */
     header {
-      position: sticky; top: 0; z-index: 10;
-      height: var(--bar);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 12px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--ink);
+      position: fixed; z-index: 10;
+      left: 50%; top: 60%; bottom: 0; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;
+      background: transparent;
     }
     .logo {
       border: 1.5px solid var(--ink);
@@ -39,7 +37,8 @@
       font-size: 15px; letter-spacing: 0.06em;
       color: var(--ink); text-decoration: none;
     }
-    .menu { display: flex; flex: 1; justify-content: space-around; }
+    .menu { display: contents; }        /* 讓三個按鈕直接一起均分 */
+    .menu a { background: var(--bg); border: 1px solid var(--ink); border-radius: 999px; padding: 6px 14px; }
     .menu a, .contact {
       font-size: 12px; letter-spacing: 0.16em;
       color: var(--ink); text-decoration: none; text-transform: uppercase;
@@ -57,7 +56,7 @@
     /* ── 主畫面：大字在後，人像在前 ── */
     .stage {
       position: relative;
-      height: calc(100svh - var(--bar));
+      height: 100svh;
       min-height: 420px;
       overflow: hidden;
     }
@@ -69,7 +68,7 @@
     .bigname {
       position: absolute; inset: 0;
       display: flex; flex-direction: column; justify-content: flex-start;
-      padding: 16px 12px 0;
+      padding: 12px 12px 0;
       font-family: "Anton", sans-serif;
       text-transform: uppercase;
       line-height: 0.82;
@@ -101,7 +100,7 @@
       .logo { font-size: 13px; padding: 3px 9px; }
       .bigname .full { display: none; }
       .bigname .line { display: block; }
-      .bigname { line-height: 0.88; justify-content: flex-start; padding-top: 4%; }
+      .bigname { line-height: 0.88; justify-content: flex-start; padding-top: 12px; }
       .bigname span { transform: none; }
       .hero { height: auto; width: 96vw; bottom: 6%; }
     }
@@ -109,7 +108,6 @@
 </head>
 <body>
   <header>
-    <a class="logo" href="./">KUO CHING TSUNG</a>
     <nav class="menu">
       <a href="works.html"><span class="num">01 </span>Works</a>
       <a href="#"><span class="num">02 </span>About</a>
@@ -140,6 +138,10 @@
         el.style.fontSize = '100px';
         el.style.fontSize = (100 * w / el.scrollWidth) + 'px';
       });
+      // 選單的上緣 = 最後一行大字的下緣
+      const shown = [...document.querySelectorAll('.fit')].filter(el => getComputedStyle(el).display !== 'none');
+      const last = shown[shown.length - 1];
+      if (last) document.querySelector('header').style.top = last.getBoundingClientRect().bottom + 'px';
     }
     (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
     addEventListener('resize', fit);
